@@ -24,8 +24,6 @@ check_alias tldr eman "tldr"
 check_alias sensors wsensors 'watch -n1 -t "sensors"'
 check_alias chafa chafa 'chafa -f sixel'
 
-check_alias update up 'update'
-check_alias sync cup 'sync'
 check_alias search-install search 'search-install'
 check_alias search-remove remove 'search-remove'
 check_alias python3 python "python3"
@@ -34,8 +32,10 @@ check_alias pip pip "pip3"
 check_alias ip myip "echo -e $(ip route get 1.2.3.4 | awk '{print $7}' | sed -z 's/\n/ /g')"
 
 # system update-aliases
-alias sync="$pkmgr -Sy"
-alias udpate="$pkmgr -Syu && pkill -SIGRTMIN+8 waybar" # sends signal to waybar
+[ "$ID" = "Arch" ] && { # Aliases for arch linux
+  alias sync="$pkmgr -Sy"
+  alias udpate="$pkmgr -Syu && pkill -SIGRTMIN+8 waybar" # sends signal to waybar
+}
 
 alias logout="loginctl terminate-session $(loginctl session-status | head -n 1 | awk '{print $1}')"
 
