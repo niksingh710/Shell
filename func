@@ -33,12 +33,14 @@ getline(){
   echo "$sum" | head -n "$1" | tail -n 1
 }
 
-clean(){
-  toclean=( $($pkmgr -Qtdq) )
-  [[ ${#toclean} == 0 ]] && return 
-  $pkmgr -Rns $toclean
-  clean
-} 
+[ "$ID" = "arch" ] && {
+  clean(){
+    toclean=( $($pkmgr -Qtdq) )
+    [[ ${#toclean} == 0 ]] && return 
+    $pkmgr -Rns $toclean
+    clean
+  } 
+}
 
 # Fzf 
 hash fzf 2>/dev/null && {
@@ -60,15 +62,16 @@ hash fzf 2>/dev/null && {
     cd $VAR
   }
 
-  search-install(){
-    $pkmgr -Slq | fzf "$select" "$deselect" --multi --preview "$pkmgr -Si {1}" | xargs -ro $pkmgr -S
-    return 
+  [ "$ID" = "arch" ] && {
+    search-install(){
+      $pkmgr -Slq | fzf "$select" "$deselect" --multi --preview "$pkmgr -Si {1}" | xargs -ro $pkmgr -S
+      return 
+    }
+    search-remove(){
+      $pkmgr -Qq | fzf "$select" "$deselect" --multi --preview "$pkmgr -Qi {1}" | xargs -ro $pkmgr -Rns
+      return
+    }
   }
-  search-remove(){
-    $pkmgr -Qq | fzf "$select" "$deselect" --multi --preview "$pkmgr -Qi {1}" | xargs -ro $pkmgr -Rns
-    return
-  }
-
 }
 
 update-grub(){

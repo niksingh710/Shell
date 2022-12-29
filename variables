@@ -1,8 +1,13 @@
+# These are shell variables 
 [ -f "$HOME/.config/sys/env" ] && . "$HOME/.config/sys/env" 
 
-pkmgr="sudo pacman"
-hash paru 2>/dev/null && pkmgr=paru
-hash yay 2>/dev/null && pkmgr=yay
+[ -f "/etc/os-release" ] && . /etc/os-release
+
+[ "$ID" = "arch" ] && {
+  pkmgr="sudo pacman"
+  hash paru 2>/dev/null && pkmgr=paru
+  hash yay 2>/dev/null && pkmgr=yay
+}
 
 # setting editor
 hash vim 2>/dev/null && export VISUAL='vim'
