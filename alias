@@ -1,0 +1,110 @@
+# This file contains aliases used by the user
+alias shell="exec `basename $(readlink /proc/$$/exe)`"
+
+check_alias(){
+  if command -v $1 &>/dev/null;then
+      alias $2="$3"
+  fi
+}
+
+# General
+check_alias advcp cp 'advcp -gR'
+check_alias advmv mv 'advmv -g'
+check_alias wl-paste paste "wl-paste"
+check_alias wl-copy copy "wl-copy"
+check_alias figlet stime 'watch -n1 -t "date +%T | figlet"'
+check_alias unimatrix matrix 'unimatrix -f -l ocCgGkS -s 96'
+check_alias 0x0 transfer '0x0'
+check_alias fm6000 ffetch 'fm6000 -r -c random'
+check_alias radeontop radeontop "radeontop -Tc"
+check_alias speed-test speedtest "speed-test"
+check_alias glow mcat "glow"
+check_alias sl sl "sl -e"
+check_alias tldr eman "tldr"
+check_alias sensors wsensors 'watch -n1 -t "sensors"'
+check_alias chafa chafa 'chafa -f sixel'
+
+check_alias update up 'update'
+check_alias sync cup 'sync'
+check_alias search-install search 'search-install'
+check_alias search-remove remove 'search-remove'
+check_alias python3 python "python3"
+check_alias pip pip "pip3"
+
+check_alias ip myip "echo -e $(ip route get 1.2.3.4 | awk '{print $7}' | sed -z 's/\n/ /g')"
+
+# system update-aliases
+alias sync="$pkmgr -Sy"
+alias udpate="$pkmgr -Syu && pkill -SIGRTMIN+8 waybar" # sends signal to waybar
+
+alias logout="loginctl terminate-session $(loginctl session-status | head -n 1 | awk '{print $1}')"
+
+alias mygip="curl -s http://ipecho.net/plain; echo"
+alias myips='echo "local : `myip` \nglobal: `mygip`"'
+alias mkdir='mkdir -p'
+alias recent='echo $(/usr/bin/ls -t | head -n 1)'
+alias weather='curl "wttr.in/?0?M"'
+alias gc='git clone $@'
+alias tb='nc termbin.com 9999'
+alias c='clear'
+alias e='$EDITOR'
+alias se='sudoedit'
+alias sc='sudo cp'
+alias sm='sudo mv'
+alias sudo='sudo '
+alias ..='cd ..'
+
+
+hash sshd 2>/dev/null && {
+  # SSH 
+  alias ssh-list="ssh | grep -i ssh"
+  alias ssh-status="sudo systemctl status sshd"
+  alias ssh-start="sudo systemctl start sshd"
+  alias ssh-stop="sudo systemctl stop sshd"
+  alias ssh-restart="sudo systemctl restart sshd"
+  alias ssh-terminate="pkill -o -u $USER sshd"
+}
+
+hash bat 2>/dev/null && {
+  alias cat="bat"
+  alias pcat="bat -p"
+  alias bcat="bat -l bash"
+  alias dcat="bat --decorations=always"
+}
+
+hash exa 2>/dev/null && {
+  args="--color=auto --icons --sort=size --group-directories-first"
+  alias l="exa -lahF $args"
+  alias ls="exa -hF $args"
+  alias la="exa -ahF $args"
+  alias lss="exa -lhF $args"
+  alias lst="exa -lahFT $args"
+  alias lt="exa -aT $args"
+}
+
+hash mysql 2>/dev/null && {
+  alias mysql-start='sudo systemctl start mysql'
+  alias mysql-status='sudo systemctl status mysql'
+  alias mysql-stop='sudo systemctl stop mysql'
+  alias sql='mysql-start && mysql -u "$USER" -p && mysql-stop'
+
+  hash mycli 2>/dev/null && {
+    alias sql='mysql-start && mycli -u "$USER" && mysql-stop'
+  }
+}
+
+hash lvim 2>/dev/null && {
+	alias vim='lvim'
+	alias nvim='lvim'
+	alias vi='lvim'
+}
+
+# custom alias on check based
+[ -d "$HOME/Downloads/temp" ] && alias cdt="cd $HOME/Downloads/temp" || alias cdt='echo "No temp present."'
+
+# quick access variable
+[ -d "/$HOME/mount/hdd" ] && alias cdh="cd /$HOME/mount/hdd/"
+
+# unsetting the check_alias function
+unset -f check_alias
+

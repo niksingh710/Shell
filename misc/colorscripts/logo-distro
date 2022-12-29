@@ -1,0 +1,28 @@
+#!/bin/bash
+
+err(){
+  echo "$1"
+  exit
+}
+
+LOC=`realpath $(dirname ${BASH_SOURCE:-$0})`
+
+[ -f "$LOC/../logo" ] || err "Logo file not found at: $LOC/../logo"
+hash neofetch 2>/dev/null || err "neofetch not installed"
+
+ARR=($(/usr/bin/cat "$LOC"/../logo))
+
+all(){
+  for i in ${ARR[@]}
+  do
+    neofetch --ascii_distro "$i" -L 
+  done
+  exit
+}
+
+random(){
+  neofetch --ascii_distro "${ARR[$(echo $(( $RANDOM % ${#ARR[@]} )))]}" -L
+}
+
+[ $# -eq 1 ] && all
+random

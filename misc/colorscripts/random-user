@@ -1,0 +1,11 @@
+#!/bin/bash
+
+binaries=(
+  "fm6000 -r -c random"
+  nitch
+  neofetch
+  pfetch
+  nerdfetch
+)
+bin=${binaries[ $(( RANDOM % ${#binaries[@]} )) ]}
+hash $(echo "$bin" | awk '{print $1}') 2>/dev/null && $bin || echo "No $bin found"

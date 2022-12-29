@@ -1,0 +1,45 @@
+[ -f "$HOME/.config/sys/env" ] && . "$HOME/.config/sys/env" 
+
+pkmgr="sudo pacman"
+hash paru 2>/dev/null && pkmgr=paru
+hash yay 2>/dev/null && pkmgr=yay
+
+# setting editor
+hash vim 2>/dev/null && export VISUAL='vim'
+hash nvim 2>/dev/null && export VISUAL='nvim'
+hash lvim 2>/dev/null && export VISUAL='lvim'
+
+export EDITOR=$VISUAL
+
+export NPM_CONFIG_PREFIX="$HOME/.npm/"
+export PNPM_HOME="$HOME/.local/share/pnpm"
+export BAT_THEME="TwoDark"
+export HISTFILE="$HOME/.shellhist"
+export ZVM_VI_EDITOR=$VISUAL
+export GIT_EDITOR=$VISUAL
+
+#FZF
+hash fzf 2>/dev/null && {
+  export FZF_CTRL_T_COMMAND="find ./ -type f"
+  hash fd 2>/dev/null && export FZF_CTRL_T_COMMAND="fd --hidden -tf"
+  preview(){
+    echo ""
+  }
+
+  hash pistol 2>/dev/null && {
+    export PISTOL_CHROMA_FORMATTER=terminal16m
+    preview(){
+      echo "--preview='pistol {$1}'"
+    }
+  }
+  select="--bind=ctrl-space:select"
+  deselect="--bind=ctrl-/:deselect"
+  opts="$select $deselect `preview` --height=60%"
+  export FZF_CTRL_T_OPTS="$opts"
+  export FZF_ALT_C_OPTS="$opts"
+  export _ZO_FZF_OPTS="`preview -1` --height=30% --layout=reverse "
+}
+
+export ZVM_VI_EDITOR=$EDITOR
+export ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
+export ZVM_VI_INSERT_ESCAPE_BINDKEY=jk

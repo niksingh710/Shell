@@ -1,0 +1,50 @@
+# zsh config after zvim
+bindkey '^ ' autosuggest-accept
+
+zstyle '*:completion:*' menu select
+zmodload zsh/complist
+# use the vi navigation keys in menu completion
+bindkey '^j' expand-or-complete 
+bindkey -M menuselect '^h' vi-backward-char
+bindkey -M menuselect '^k' vi-up-line-or-history
+bindkey -M menuselect '^l' vi-forward-char
+bindkey -M menuselect '^j' vi-down-line-or-history
+
+command -v fcd 1>/dev/null && {
+  fcd-z(){
+    fcd
+    ls
+    zle reset-prompt
+  }
+  zle -N fcd-z fcd-z
+  bindkey '^G' fcd-z
+}
+
+command -v search-install 1>/dev/null && {
+  search-install-z(){
+    search-install
+    zle reset-prompt
+  }
+  zle -N search-install-z search-install-z
+  bindkey '^_' search-install-z # maps ctrl+/ 
+}
+
+command -v search-remove 1>/dev/null && {
+  search-remove-z(){
+    search-remove
+    zle reset-prompt
+  }
+  zle -N search-remove-z search-remove-z
+  bindkey '^[^_' search-remove-z
+}
+
+
+hash fzf 2>/dev/null && {
+  [ -d "$loc/../fzf" ] && {
+    arr=($(find "$loc/../fzf/" -type f -iname "*.zsh"))
+    for i in "${arr[@]}"
+    do
+      source "$i"
+    done
+  }
+}

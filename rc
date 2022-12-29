@@ -1,0 +1,22 @@
+# This is the common rc file that should be called by every shell {zsh,bash,fish}
+[[ "$(tty)" == "/dev/tty1" ]] && {
+  [ -f "$HOME/bin/launch-session" ] && "$HOME/bin/launch-session" &>/dev/null
+}
+myloc="$HOME/.config/shell"
+
+[ -f "$myloc/path" ] && . "$myloc/path"
+[ -f "$myloc/variables" ] && . "$myloc/variables"
+[ -f "$myloc/func" ] && . "$myloc/func"
+[ -f "$myloc/alias" ] && . "$myloc/alias"
+
+[ -f "$HOME/.config/wpg/sequences" ] && /usr/bin/cat "$HOME/.config/wpg/sequences"
+
+# Sourcing shell specific config
+shell=`basename $(realpath /proc/$$/exe)`
+
+hash fnm 2>/dev/null && {
+  eval "$(fnm env)"
+}
+
+[ -f "$myloc/$shell/config" ] && . "$myloc/$shell/config"
+# hash colorscript 2>/dev/null && colorscript -r

@@ -1,0 +1,28 @@
+# This file updates the path variable to have the variables present in the list. 
+# If those directories exists.
+
+add_path(){
+  ARR=("$@")
+  for i in "${ARR[@]}"
+    do
+     if [ -d $i ] && [[ ":$PATH:" != *":$i:"* ]]; then
+      export PATH="${PATH:+"$PATH:"}$i"
+     fi
+    done
+}
+
+PATHLIST=(
+   "$HOME/.local/bin"
+   "$HOME/bin"
+   "$HOME/.cargo/bin"
+   "$HOME/.npm/bin"
+   "$HOME/go/bin"
+   "$HOME/.fnm"
+   "$HOME/.config/shell/misc/bin"
+   "$HOME/.config/hypr/scripts/bin"
+   "$HOME/.config/waybar/scripts/bin"
+   "$PNPM_HOME"
+)
+
+add_path ${PATHLIST[@]}
+unset -f add_path

@@ -1,0 +1,27 @@
+# This is bash config
+loc=`realpath $(dirname ${BASH_SOURCE:-$0})`
+
+
+command -v fzf 1>/dev/null && bind -x '"\C-g":fcd'
+
+# initializing starship in bash
+eval "$(starship init bash)"
+
+[ -d "$loc/completions" ] && {
+  arr=($(find "$loc/completions/" -type f))
+  for i in "${arr[@]}"
+  do
+    source "$i"
+  done
+}
+
+[ -d "$loc/../fzf" ] && {
+  arr=($(find "$loc/../fzf/" -type f -iname "*.bash"))
+  for i in "${arr[@]}"
+  do
+    # echo "$i"
+    source "$i"
+  done
+}
+
+

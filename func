@@ -1,0 +1,98 @@
+# This is a config to be sourced for user based functions
+# bash based script
+
+getix(){
+  [ $# -eq 1 ] || return
+  curl --silent http://ix.io/$1
+}
+
+cpu(){
+  # simple cpu function
+  [ $# -eq 0 ] && {
+    watch -n1 -t "grep \"^[c]pu MHz\" /proc/cpuinfo"
+    return
+  }
+  [ $1 = "governer" ] && {
+    cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor 
+    return
+  }
+  [ $1 = "turbo" ] && {
+    [ $(cat /sys/devices/system/cpu/intel_pstate/no_turbo) = 0 ] && echo "Turbo: On" || echo "Turbo: Off"
+    return
+  }
+}
+
+getline(){
+  # This function will extract any line from a file when get piped 
+  [ $# -eq 1 ] || return
+  sum=""
+  while read data;
+  do
+    sum+="$data\n"
+  done
+  echo "$sum" | head -n "$1" | tail -n 1
+}
+
+clean(){
+  toclean=( $($pkmgr -Qtdq) )
+  [[ ${#toclean} == 0 ]] && return 
+  $pkmgr -Rns $toclean
+  clean
+} 
+
+# Fzf 
+hash fzf 2>/dev/null && {
+  gd() {
+    preview="git diff $@ --color=always -- {-1}"
+    git diff $@ --name-only | fzf -m --ansi --preview $preview
+  }
+
+  fcd(){
+    dir_path="."
+    [ ! -z $1 ] && dir_path="$1"
+    FIND="find $dir_path -path \"*/.git\" -prune -o -type d"
+    hash fd 2>/dev/null && FIND="fd $dir_path --type d --hidden"
+
+    command="$FIND | fzf --height 60% --layout=reverse `preview`"
+    VAR=$(eval $command)
+
+    [ -z $VAR ] && VAR=$(pwd)
+    cd $VAR
+  }
+
+  search-install(){
+    $pkmgr -Slq | fzf "$select" "$deselect" --multi --preview "$pkmgr -Si {1}" | xargs -ro $pkmgr -S
+    return 
+  }
+  search-remove(){
+    $pkmgr -Qq | fzf "$select" "$deselect" --multi --preview "$pkmgr -Qi {1}" | xargs -ro $pkmgr -Rns
+    return
+  }
+
+}
+
+update-grub(){
+  hash grub-mkconfig &>/dev/null || return 0
+  sudo grub-mkconfig -o /boot/grub/grub.cfg
+  echo "Updated Grub!!"
+  echo "Now commenting echo in /boot/grub/grub.cfg"
+  sudo sed -i 's/echo/#echo/g' /boot/grub/grub.cfg 
+  echo "Done Updating...."
+}
+
+lsbin(){
+  # This lists all binaries available to system path
+  plist=($(echo $PATH | tr ":" "\n"))
+  for i in ${plist[@]}
+  do
+    /usr/bin/ls -1 "$i"
+  done
+}
+
+open(){
+  hash xdg-open 2>/dev/null || return 1
+  [ $# -eq 1 ] && {
+    xdg-open "$(realpath $1)" & disown &>/dev/null
+    return
+  }
+}
