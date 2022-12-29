@@ -13,7 +13,7 @@ chsh -s $(which zsh)
 ```
 
 ```bash
-curl --silent https://raw.githubusercontent.com/niksingh710/Shell/master/setup | bash
+bash <(curl -s https://raw.githubusercontent.com/niksingh710/Shell/master/setup)
 ```
 
 ## Recommended Tools to have
