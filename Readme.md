@@ -4,6 +4,14 @@ This is shell config (bash,zsh) to make sure that i have seamless experience in 
 
 # How to?
 
+## If you want to use zsh
+make sure zsh is installed 
+and run
+```bash
+chsh -s $(which zsh)
+
+```
+
 ```bash
 curl --silent https://raw.githubusercontent.com/niksingh710/Shell/master/setup | bash
 ```
