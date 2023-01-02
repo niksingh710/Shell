@@ -17,6 +17,10 @@ cpu(){
     return
   }
   [ $1 = "turbo" ] && {
+    [ -f /sys/devices/system/cpu/intel_pstate/no_turbo ] || {
+      echo "Check if intel pstate drivers are in use."
+      return
+    }
     [ $(cat /sys/devices/system/cpu/intel_pstate/no_turbo) = 0 ] && echo "Turbo: On" || echo "Turbo: Off"
     return
   }
@@ -68,7 +72,7 @@ hash fzf 2>/dev/null && {
       return 
     }
     search-remove(){
-      $pkmgr -Qq | fzf "$select" "$deselect" --multi --preview "$pkmgr -Qi {1}" | xargs -ro $pkmgr -Rns
+      $pkmgr -Qq | fzf "$select" "$deselect" --multi --preview "$pkmgr -Qil {1}" | xargs -ro $pkmgr -Rns
       return
     }
   }

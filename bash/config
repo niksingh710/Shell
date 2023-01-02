@@ -24,4 +24,11 @@ eval "$(starship init bash)"
   done
 }
 
+# Arch command-not-found autocomplete
+[ "$ID" = "arch" ] && {
+  [ -f /usr/share/doc/pkgfile/command-not-found.zsh ] && source /usr/share/doc/pkgfile/command-not-found.zsh
+}
 
+# bash options
+shopt -s autocd
+shopt -s checkwinsize

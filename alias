@@ -23,6 +23,7 @@ check_alias sl sl "sl -e"
 check_alias tldr eman "tldr"
 check_alias sensors wsensors 'watch -n1 -t "sensors"'
 check_alias chafa chafa 'chafa -f sixel'
+check_alias moar less 'moar'
 
 check_alias search-install search 'search-install'
 check_alias search-remove remove 'search-remove'
@@ -32,9 +33,9 @@ check_alias pip pip "pip3"
 check_alias ip myip "echo -e $(ip route get 1.2.3.4 | awk '{print $7}' | sed -z 's/\n/ /g')"
 
 # system update-aliases
-[ "$ID" = "Arch" ] && { # Aliases for arch linux
+[ "$ID" = "arch" ] && { # Aliases for arch linux
   alias sync="$pkmgr -Sy"
-  alias udpate="$pkmgr -Syu && pkill -SIGRTMIN+8 waybar" # sends signal to waybar
+  alias update="$pkmgr -Syu && pkill -SIGRTMIN+8 waybar" # sends signal to waybar
 }
 
 alias logout="loginctl terminate-session $(loginctl session-status | head -n 1 | awk '{print $1}')"
@@ -64,12 +65,20 @@ hash sshd 2>/dev/null && {
   alias ssh-restart="sudo systemctl restart sshd"
   alias ssh-terminate="pkill -o -u $USER sshd"
 }
-
-hash bat 2>/dev/null && {
-  alias cat="bat"
-  alias pcat="bat -p"
-  alias bcat="bat -l bash"
-  alias dcat="bat --decorations=always"
+[ $ID = "arch" ] && {
+  hash bat 2>/dev/null && {
+    alias cat="bat"
+    alias pcat="bat -p"
+    alias bcat="bat -l bash"
+    alias dcat="bat --decorations=always"
+  }
+} || {
+  hash batcat 2>/dev/null && {
+    alias cat="batcat"
+    alias pcat="batcat -p"
+    alias bcat="batcat -l bash"
+    alias dcat="batcat --decorations=always"
+  }
 }
 
 hash exa 2>/dev/null && {

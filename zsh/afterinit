@@ -1,6 +1,7 @@
 # zsh config after zvim
 bindkey '^ ' autosuggest-accept
 
+zstyle ':completion:*' rehash true
 zstyle '*:completion:*' menu select
 zmodload zsh/complist
 # use the vi navigation keys in menu completion
@@ -48,3 +49,6 @@ hash fzf 2>/dev/null && {
     done
   }
 }
+
+# zsh options
+setopt autocd

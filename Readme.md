@@ -12,6 +12,8 @@ chsh -s $(which zsh)
 
 ```
 
+## Installation Instruction
+
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/niksingh710/Shell/master/setup)
 ```

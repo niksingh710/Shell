@@ -41,3 +41,7 @@ setopt HIST_IGNORE_SPACE
 # aliases
 alias history="history 0"
 
+# Arch command-not-found autocomplete
+[ "$ID" = "arch" ] && {
+  [ -f /usr/share/doc/pkgfile/command-not-found.zsh ] && source /usr/share/doc/pkgfile/command-not-found.zsh
+}

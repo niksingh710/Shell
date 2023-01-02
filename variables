@@ -45,6 +45,8 @@ hash fzf 2>/dev/null && {
   export _ZO_FZF_OPTS="`preview -1` --height=30% --layout=reverse "
 }
 
+hash moar 2>/dev/null && export MANPAGER=moar
+
 export ZVM_VI_EDITOR=$EDITOR
 export ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
 export ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
