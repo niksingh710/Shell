@@ -38,8 +38,6 @@ check_alias ip myip "echo -e $(ip route get 1.2.3.4 | awk '{print $7}' | sed -z 
   alias update="$pkmgr -Syu && pkill -SIGRTMIN+8 waybar" # sends signal to waybar
 }
 
-alias logout="loginctl terminate-session $(loginctl session-status | head -n 1 | awk '{print $1}')"
-
 alias mygip="curl -s http://ipecho.net/plain; echo"
 alias myips='echo "local : `myip` \nglobal: `mygip`"'
 alias mkdir='mkdir -p'
