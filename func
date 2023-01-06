@@ -24,7 +24,11 @@ battery(){
   id="$(echo $mdata | awk '{print $3}')"
   devicename="$(echo $mdata | awk '{print $2}')"
   battery="$(qdbus org.kde.kdeconnect.daemon /modules/kdeconnect/devices/$id/battery org.kde.kdeconnect.device.battery.charge)"
-  echo "$devicename $battery%"
+  state="$(qdbus org.kde.kdeconnect.daemon /modules/kdeconnect/devices/$id/battery org.kde.kdeconnect.device.battery.isCharging)" 
+  [ "$state" = true ] && state="Charging" || state="Not Charging"
+  echo "$devicename"
+  echo "  Status:     $state"
+  echo "  Capacity:   $battery%"
   echo ""
 }
 
