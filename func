@@ -6,6 +6,18 @@ getix(){
   curl --silent http://ix.io/$1
 }
 
+battery(){
+  batteries=($(/usr/bin/ls -d "/sys/class/power_supply/BAT"*))
+  for i in ${batteries[@]}
+  do
+    echo "$(basename $i): $(/usr/bin/cat $i/model_name) $(/usr/bin/cat $i/technology)"
+    echo "  Status:   $(/usr/bin/cat $i/status)"
+    echo "  Health:   $(( $(/usr/bin/cat energy_full) * 100 / $(/usr/bin/cat energy_full_design)  ))%"
+    echo "  Cycle:    $(/usr/bin/cat $i/cycle_count)"
+    echo "  Capacity: $(/usr/bin/cat $i/capacity)%"
+  done
+}
+
 cpu(){
   # simple cpu function
   [ $# -eq 0 ] && {
@@ -22,6 +34,30 @@ cpu(){
       return
     }
     [ $(cat /sys/devices/system/cpu/intel_pstate/no_turbo) = 0 ] && echo "Turbo: On" || echo "Turbo: Off"
+    return
+  }
+  [ $1 = "turbo" ] && {
+    [ -f /sys/devices/system/cpu/intel_pstate/no_turbo ] || {
+      echo "Check if intel pstate drivers are in use."
+      return
+    }
+    [ $(cat /sys/devices/system/cpu/intel_pstate/no_turbo) = 0 ] && echo "Turbo: On" || echo "Turbo: Off"
+    return
+  }
+[ $1 = "turbo" ] && {
+    [ -f /sys/devices/system/cpu/intel_pstate/no_turbo ] || {
+      echo "Check if intel pstate drivers are in use."
+      return
+    }
+    [ $(cat /sys/devices/system/cpu/intel_pstate/no_turbo) = 0 ] && echo "Turbo: On" || echo "Turbo: Off"
+    return
+  }
+  [ $1 = "temp" ] && {
+    hash sensors 2>/dev/null || {
+      echo "lm-sensors is not installed"
+      return
+    }
+    watch -n1 -t sensors coretemp-isa-0000
     return
   }
 }

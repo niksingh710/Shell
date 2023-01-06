@@ -79,6 +79,11 @@ hash sshd 2>/dev/null && {
   }
 }
 
+hash waydroid 2>/dev/null && {
+  alias waydroid-start="sudo systemctl start waydroid-container.service"
+  alias waydroid-stop="sudo systemctl stop waydroid-container.service"
+}
+
 hash exa 2>/dev/null && {
   args="--color=auto --icons --sort=size --group-directories-first"
   alias l="exa -lahF $args"

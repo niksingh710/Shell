@@ -17,6 +17,6 @@ shell=`basename $(realpath /proc/$$/exe)`
 hash fnm 2>/dev/null && {
   eval "$(fnm env)"
 }
-
+stty -ixon # Disables shell freeze on ctrl+s
 [ -f "$myloc/$shell/config" ] && . "$myloc/$shell/config"
 # hash colorscript 2>/dev/null && colorscript -r
