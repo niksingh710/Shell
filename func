@@ -16,6 +16,16 @@ battery(){
     echo "  Cycle:    $(/usr/bin/cat $i/cycle_count)"
     echo "  Capacity: $(/usr/bin/cat $i/capacity)%"
   done
+  echo ""
+  hash kdeconnect-cli 2>/dev/null || return
+  hash qdbus 2>/dev/null || return
+  mdata="$(kdeconnect-cli -a 2>/dev/null)"
+  [ -z $mdata ] && return
+  id="$(echo $mdata | awk '{print $3}')"
+  devicename="$(echo $mdata | awk '{print $2}')"
+  battery="$(qdbus org.kde.kdeconnect.daemon /modules/kdeconnect/devices/$id/battery org.kde.kdeconnect.device.battery.charge)"
+  echo "$devicename $battery%"
+  echo ""
 }
 
 cpu(){
