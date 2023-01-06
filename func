@@ -12,7 +12,7 @@ battery(){
   do
     echo "$(basename $i): $(/usr/bin/cat $i/model_name) $(/usr/bin/cat $i/technology)"
     echo "  Status:   $(/usr/bin/cat $i/status)"
-    echo "  Health:   $(( $(/usr/bin/cat energy_full) * 100 / $(/usr/bin/cat energy_full_design)  ))%"
+    echo "  Health:   $(( $(/usr/bin/cat $i/energy_full) * 100 / $(/usr/bin/cat $i/energy_full_design)  ))%"
     echo "  Cycle:    $(/usr/bin/cat $i/cycle_count)"
     echo "  Capacity: $(/usr/bin/cat $i/capacity)%"
   done
