@@ -4,6 +4,7 @@ loc=`realpath $(dirname ${BASH_SOURCE:-$0})`
 
 command -v fzf 1>/dev/null && bind -x '"\C-g":fcd'
 
+hash doas 2>/dev/null && complete -cf doas
 # initializing starship in bash
 eval "$(starship init bash)"
 

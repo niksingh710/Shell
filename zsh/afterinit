@@ -53,5 +53,6 @@ hash fzf 2>/dev/null && {
   }
 }
 
+hash doas 2>/dev/null && complete -cf doas
 # zsh options
 setopt autocd

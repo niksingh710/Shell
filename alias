@@ -29,6 +29,11 @@ check_alias search-install search 'search-install'
 check_alias search-remove remove 'search-remove'
 check_alias python3 python "python3"
 check_alias pip pip "pip3"
+check_alias sudoedit se "sudoedit"
+check_alias sudo sudo "sudo "
+check_alias doas sudo "echo 'please use doas!!'"
+check_alias doas doas "doas "
+check_alias doasedit se "doasedit"
 
 check_alias ip myip "echo -e $(ip route get 1.2.3.4 | awk '{print $7}' | sed -z 's/\n/ /g')"
 
@@ -47,20 +52,18 @@ alias gc='git clone $@'
 alias tb='nc termbin.com 9999'
 alias c='clear'
 alias e='$EDITOR'
-alias se='sudoedit'
-alias sc='sudo cp'
-alias sm='sudo mv'
-alias sudo='sudo '
+alias rcp='$rootmgr cp'
+alias rmv='$rootmgr mv'
 alias ..='cd ..'
 
 
 hash sshd 2>/dev/null && {
   # SSH 
   alias ssh-list="ssh | grep -i ssh"
-  alias ssh-status="sudo systemctl status sshd"
-  alias ssh-start="sudo systemctl start sshd"
-  alias ssh-stop="sudo systemctl stop sshd"
-  alias ssh-restart="sudo systemctl restart sshd"
+  alias ssh-status="$rootmgr systemctl status sshd"
+  alias ssh-start="$rootmgr systemctl start sshd"
+  alias ssh-stop="$rootmgr systemctl stop sshd"
+  alias ssh-restart="$rootmgr systemctl restart sshd"
   alias ssh-terminate="pkill -o -u $USER sshd"
 }
 [ $ID = "arch" ] && {
@@ -80,8 +83,8 @@ hash sshd 2>/dev/null && {
 }
 
 hash waydroid 2>/dev/null && {
-  alias waydroid-start="sudo systemctl start waydroid-container.service"
-  alias waydroid-stop="sudo systemctl stop waydroid-container.service"
+  alias waydroid-start="$rootmgr systemctl start waydroid-container.service"
+  alias waydroid-stop="$rootmgr systemctl stop waydroid-container.service"
 }
 
 hash exa 2>/dev/null && {
@@ -95,9 +98,9 @@ hash exa 2>/dev/null && {
 }
 
 hash mysql 2>/dev/null && {
-  alias mysql-start='sudo systemctl start mysql'
-  alias mysql-status='sudo systemctl status mysql'
-  alias mysql-stop='sudo systemctl stop mysql'
+  alias mysql-start='$rootmgr systemctl start mysql'
+  alias mysql-status='$rootmgr systemctl status mysql'
+  alias mysql-stop='$rootmgr systemctl stop mysql'
   alias sql='mysql-start && mysql -u "$USER" -p && mysql-stop'
 
   hash mycli 2>/dev/null && {

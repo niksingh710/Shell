@@ -130,10 +130,10 @@ hash fzf 2>/dev/null && {
 
 update-grub(){
   hash grub-mkconfig &>/dev/null || return 0
-  sudo grub-mkconfig -o /boot/grub/grub.cfg
+  $rootmgr grub-mkconfig -o /boot/grub/grub.cfg
   echo "Updated Grub!!"
   echo "Now commenting echo in /boot/grub/grub.cfg"
-  sudo sed -i 's/echo/#echo/g' /boot/grub/grub.cfg 
+  $rootmgr sed -i 's/echo/#echo/g' /boot/grub/grub.cfg 
   echo "Done Updating...."
 }
 

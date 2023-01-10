@@ -2,9 +2,11 @@
 [ -f "$HOME/.config/sys/env" ] && . "$HOME/.config/sys/env" 
 
 [ -f "/etc/os-release" ] && . /etc/os-release
+rootmgr="sudo"
+hash doas 2>/dev/null && rootmgr="doas"
 
 [ "$ID" = "arch" ] && {
-  pkmgr="sudo pacman"
+  pkmgr="$rootmgr pacman"
   hash paru 2>/dev/null && pkmgr=paru
   hash yay 2>/dev/null && pkmgr=yay
 }

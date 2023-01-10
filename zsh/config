@@ -16,6 +16,7 @@ fpath+="$loc/completions/"
   znap source z-shell/F-Sy-H
   znap source chrissicool/zsh-256color
   znap source jeffreytse/zsh-vi-mode
+  znap source Senderman/doas-zsh-plugin
   # znap source marlonrichert/zsh-autocomplete
 
   prompt-init(){
