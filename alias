@@ -39,7 +39,7 @@ check_alias ip myip "echo -e $(ip route get 1.2.3.4 | awk '{print $7}' | sed -z 
 
 # system update-aliases
 [ "$ID" = "arch" ] && { # Aliases for arch linux
-  alias sync="$pkmgr -Sy"
+  alias sync="$pkmgr -Sy && pkill -SIGRTMIN+8 waybar"
   alias update="$pkmgr -Syu && pkill -SIGRTMIN+8 waybar" # sends signal to waybar
 }
 
@@ -110,7 +110,7 @@ hash mysql 2>/dev/null && {
 
 hash lvim 2>/dev/null && {
 	alias vim='lvim'
-	alias nvim='lvim'
+	# alias nvim='lvim'
 	alias vi='lvim'
 }
 

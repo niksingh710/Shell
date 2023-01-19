@@ -21,7 +21,7 @@ battery(){
   hash qdbus 2>/dev/null || return
   mdata="$(kdeconnect-cli -a 2>/dev/null)"
   [ -z $mdata ] && return
-  id="$(echo $mdata | awk '{print $3}')"
+  id="$(echo ${mdata#*:} | awk '{print $1}')"
   devicename="$(echo $mdata | awk '{print $2}')"
   battery="$(qdbus org.kde.kdeconnect.daemon /modules/kdeconnect/devices/$id/battery org.kde.kdeconnect.device.battery.charge)"
   state="$(qdbus org.kde.kdeconnect.daemon /modules/kdeconnect/devices/$id/battery org.kde.kdeconnect.device.battery.isCharging)" 
@@ -30,6 +30,23 @@ battery(){
   echo "  Status:     $state"
   echo "  Capacity:   $battery%"
   echo ""
+}
+
+webcam(){
+  [ $# -eq 1 ] && {
+    devideo="/dev/video$1" 
+  }
+  hash v4l2-ctl 2>/dev/null || {
+    echo "v4l2-ctl is not present."
+    echo "Give /dev/video* (integer input)"
+    [ -z $device ] && return
+  }
+  [ -z $devideo ] && devideo="$(v4l2-ctl --list-devices | grep -i 'camera' -A 1 | tail -n 1 | sed -z 's/\t//g')"
+  hash mpv 2>/dev/null || {
+    echo "mpv is not installed"
+    return
+  }
+  mpv av://v4l2:/dev/video0 --profile=low-latency --untimed &>/dev/null
 }
 
 cpu(){
@@ -106,8 +123,8 @@ hash fzf 2>/dev/null && {
   fcd(){
     dir_path="."
     [ ! -z $1 ] && dir_path="$1"
-    FIND="find $dir_path -path \"*/.git\" -prune -o -type d"
-    hash fd 2>/dev/null && FIND="fd $dir_path --type d --hidden"
+    FIND="find $dir_path -not -path '*/\.git*' -type d"
+    hash fd 2>/dev/null && FIND="fd $dir_path --type d --hidden --exclude .git"
 
     command="$FIND | fzf --height 60% --layout=reverse `preview`"
     VAR=$(eval $command)
