@@ -5,21 +5,21 @@ config="$HOME/.config/shell"
 normal="\e[0m"
 invert="\e[41m"
 
-err(){
-  echo -e "$invert Err:$normal $@"
+err() {
+	echo -e "$invert Err:$normal $@"
 }
 
-check(){
-  hash git 2>/dev/null || {
-    err "git is not installed"
-    err "make sure git is installed"
-    exit 1
-  }
+check() {
+	hash git 2>/dev/null || {
+		err "git is not installed"
+		err "make sure git is installed"
+		exit 1
+	}
 
-  [ -z "$(ls -A "$config")" ] || {
-    err "Make sure $config is empty"
-    exit 1
-  }
+	[ -z "$(ls -A "$config")" ] || {
+		err "Make sure $config is empty"
+		exit 1
+	}
 }
 
 echo -e "\e[7m Setting up shell for $(whoami)...$normal\n"
@@ -30,18 +30,20 @@ check
 echo "Cloning the whole shell directory in $config"
 git clone "https://github.com/niksingh710/shell" "$HOME/.config/shell"
 
-echo "This will override ~/.bashrc and ~/.zshrc..."
+echo "This will override ~/.bashrc, ~/.zshrc, ~/.tmux.conf, ~/.config/starship.toml..."
 
 read -p "Are you sure? [y/N]: " -n 1 -r
 echo ""
 [[ $REPLY =~ ^[Yy]$ ]] && {
-  echo "Creating a link of starship.toml"
-  ln -sf "$HOME/.config/shell/modules/starship/starship.toml" "$HOME/.config/starship.toml"
-  echo '[ -f "$HOME/.config/shell/rc" ] && . "$HOME/.config/shell/rc"' > ~/.bashrc
-  echo '[ -f "$HOME/.config/shell/rc" ] && . "$HOME/.config/shell/rc"' > ~/.zshrc
-  echo "Added command in ~/.bashrc and ~/.zshrc"
+	echo "Creating a link of starship.toml"
+	ln -sf "$HOME/.config/shell/modules/starship/starship.toml" "$HOME/.config/starship.toml"
+	echo "Creating a link of tmux.conf"
+	ln -sf "$HOME/.config/shell/modules/tmux/tmux.conf" "$HOME/.tmux.conf"
 
-  echo -e "$invert Make sure to have these tools for better experience :$normal fzf, starship, ripgrep, bat, glow"
-  echo "In Arch: yay -S fzf ripgrep starship bat glow"
+	echo '[ -f "$HOME/.config/shell/rc" ] && . "$HOME/.config/shell/rc"' >~/.bashrc
+	echo '[ -f "$HOME/.config/shell/rc" ] && . "$HOME/.config/shell/rc"' >~/.zshrc
+	echo "Added command in ~/.bashrc and ~/.zshrc"
+
+	echo -e "$invert Make sure to have these tools for better experience :$normal fzf, starship, ripgrep, bat, glow"
+	echo "In Arch: yay -S fzf ripgrep starship bat glow"
 }
-
